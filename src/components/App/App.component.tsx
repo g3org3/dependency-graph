@@ -53,9 +53,9 @@ const OverviewFlow = () => {
 
   if (!yamlText) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <textarea ref={textareaRef} style={{ height: '50vh' }} />
-        <Button variant="contained" onClick={loadYaml}>
+      <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', padding: '20px' }}>
+        <textarea ref={textareaRef} style={{ height: '50vh', width: '50%' }} />
+        <Button size="large" variant="contained" onClick={loadYaml}>
           load
         </Button>
       </div>
@@ -228,8 +228,8 @@ const OverviewFlow = () => {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '95vh' }}>
-      <div style={{ display: 'flex', gap: '8px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', padding: '8px', background: '#eee' }}>
         <Button variant="outlined" onClick={show}>
           print
         </Button>
@@ -258,7 +258,7 @@ const OverviewFlow = () => {
             nodeColor={(n) => {
               if (n.style?.background) return n.style.background
 
-              return '#0F0'
+              return '#fff'
             }}
             nodeBorderRadius={2}
           />
@@ -266,6 +266,7 @@ const OverviewFlow = () => {
           <Background color="#eee" gap={16} />
         </ReactFlow>
       </div>
+      <div></div>
     </div>
   )
 }

@@ -1,1 +1,1 @@
-export { default } from './App.component.js'
+export { default } from './App.component'

@@ -1,29 +1,44 @@
 import React, { createRef, useState } from 'react'
 import Button from '@mui/material/Button'
 import yaml from 'yaml'
-import ReactFlow, { removeElements, addEdge, MiniMap, Controls, Background } from 'react-flow-renderer'
+import ReactFlow, { MiniMap, Controls, Background } from 'react-flow-renderer'
 
-const textareaRef = createRef()
+const textareaRef: React.RefObject<HTMLTextAreaElement> = createRef()
 
 const getRColor = () => Math.floor(Math.random() * 16777215).toString(16)
 
-const getRoot = (byId, id) => {
-  if (!byId[id].parent) {
-    return byId[id]
+interface PreTicket {
+  colorid?: number
+  id: string
+  notes?: string
+  owner?: string
+  parent?: string
+  points?: number
+  position?: string
+  status?: string
+}
+interface Ticket extends PreTicket {
+  colorid: number
+}
+interface TicketsById {
+  [id: string]: Ticket
+}
+const getRoot = (byId: TicketsById, id: string): Ticket => {
+  const ticket = byId[id]
+  if (!ticket.parent) {
+    return ticket
   }
-  if (byId[id].parent.indexOf(',') !== -1) {
-    return byId[id]
+  if (ticket.parent.indexOf(',') !== -1) {
+    return ticket
   }
-  return getRoot(byId, byId[id].parent)
+  return getRoot(byId, ticket.parent)
 }
 
 const OverviewFlow = () => {
-  const [elements, setElements] = useState([])
-  const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els))
-  const onConnect = (params) => setElements((els) => addEdge(params, els))
-  const [yamlText, setYaml] = useState(null)
+  const [yamlText, setYaml] = useState<string | null>(null)
   const [rfINstance, setRFInstance] = useState(null)
 
+  // @ts-ignore
   const onLoad = (reactFlowInstance) => {
     console.log('flow loaded:', reactFlowInstance)
     reactFlowInstance.fitView()
@@ -31,7 +46,9 @@ const OverviewFlow = () => {
   }
 
   const loadYaml = () => {
-    setYaml(textareaRef.current.value)
+    if (!!textareaRef.current) {
+      setYaml(textareaRef.current.value)
+    }
   }
 
   if (!yamlText) {
@@ -46,23 +63,24 @@ const OverviewFlow = () => {
   }
 
   const tickets = yaml.parse(yamlText)
-  const ticketsById = tickets.reduce((_, t) => ({ ..._, [t.id]: { ...t, colorid: getRColor() } }), {})
+  const ticketsById = tickets.reduce((_: {}, t: PreTicket): TicketsById => ({ ..._, [t.id]: { ...t, colorid: getRColor() } }), {})
 
-  const generateNodes = (ticket, i) => {
-    const colors = {
-      done: 'green',
+  const generateNodes = (ticket: PreTicket, i: number) => {
+    // const colors = {
+    //   done: 'green',
+    //   doing: 'orange',
+    //   todo: 'blue',
+    //   return: 'red',
+    // }
+    // const color = colors[ticket.status] || 'black'
+    const backgrounds: { [key: string]: string } = {
+      default: '#f8f8f8',
       doing: 'orange',
-      todo: 'blue',
+      done: 'green',
       return: 'red',
-    }
-    const color = colors[ticket.status] || 'black'
-    const backgrounds = {
-      done: 'green',
-      doing: 'orange',
       todo: 'purple',
-      return: 'red',
     }
-    const background = backgrounds[ticket.status] || '#f8f8f8'
+    const background = backgrounds[ticket.status || 'default']
     const position = { x: 0, y: i * 70 }
     if (ticket.position) {
       position.x = Number(ticket.position.split(',')[0])
@@ -132,7 +150,7 @@ const OverviewFlow = () => {
     }
   }
 
-  const generateLinks = (ticket, i) => {
+  const generateLinks = (ticket: PreTicket, i: number) => {
     if (!ticket.parent) return null
 
     if (ticket.parent.split(',').length > 1) {
@@ -163,6 +181,7 @@ const OverviewFlow = () => {
   ]
 
   const show = () => {
+    // @ts-ignore
     const byId = rfINstance.toObject().elements.reduce((_, e) => ({ ..._, [e.id]: e }), {})
 
     Object.keys(byId).forEach((key) => {
@@ -177,20 +196,31 @@ const OverviewFlow = () => {
     })
 
     const tickets = Object.values(byId)
+      //@ts-ignore
       .filter((t) => !t.source)
       .map((t) => {
         const o = {
+          //@ts-ignore
           id: t.id,
+          //@ts-ignore
           status: t.status,
+          //@ts-ignore
           notes: t.notes,
+          //@ts-ignore
           position: t.position ? `${Math.floor(t.position.x)},${Math.floor(t.position.y)}` : null,
+          //@ts-ignore
           parent: t.parent,
+          //@ts-ignore
           points: t.points,
+          //@ts-ignore
           owner: t.owner,
+          //@ts-ignore
           colorid: t.colorid,
         }
         return Object.keys(o)
+          //@ts-ignore
           .filter((k) => !!o[k])
+          //@ts-ignore
           .reduce((_, k) => ({ ..._, [k]: o[k] }), {})
       })
 
@@ -213,18 +243,18 @@ const OverviewFlow = () => {
       <div style={{ flex: 1 }}>
         <ReactFlow
           elements={initialElements}
-          onElementsRemove={onElementsRemove}
-          onConnect={onConnect}
           onLoad={onLoad}
           snapToGrid
           snapGrid={[15, 15]}
         >
           <MiniMap
+            //@ts-ignore
             nodeStrokeColor={(n) => {
               if (n.style?.background) return n.style.background
 
               return '#eee'
             }}
+            //@ts-ignore
             nodeColor={(n) => {
               if (n.style?.background) return n.style.background
 

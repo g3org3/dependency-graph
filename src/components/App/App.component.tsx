@@ -1,7 +1,10 @@
-import React, { createRef, useState } from 'react'
 import Button from '@mui/material/Button'
-import yaml from 'yaml'
+import React, { createRef, useState } from 'react'
 import ReactFlow, { MiniMap, Controls, Background } from 'react-flow-renderer'
+import yaml from 'yaml'
+import { toast } from 'react-hot-toast'
+
+import { dependencyInYaml } from './example.yml'
 
 const textareaRef: React.RefObject<HTMLTextAreaElement> = createRef()
 
@@ -37,6 +40,7 @@ const getRoot = (byId: TicketsById, id: string): Ticket => {
 const OverviewFlow = () => {
   const [yamlText, setYaml] = useState<string | null>(null)
   const [rfINstance, setRFInstance] = useState(null)
+  const [print, setPrint] = useState<string | null>(null)
 
   // @ts-ignore
   const onLoad = (reactFlowInstance) => {
@@ -47,6 +51,7 @@ const OverviewFlow = () => {
 
   const loadYaml = () => {
     if (!!textareaRef.current) {
+      toast.success('Dependency Loaded')
       setYaml(textareaRef.current.value)
     }
   }
@@ -54,7 +59,7 @@ const OverviewFlow = () => {
   if (!yamlText) {
     return (
       <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', padding: '20px' }}>
-        <textarea ref={textareaRef} style={{ height: '50vh', width: '50%' }} />
+        <textarea ref={textareaRef} style={{ height: '50vh', width: '50%' }} defaultValue={dependencyInYaml} />
         <Button size="large" variant="contained" onClick={loadYaml}>
           load
         </Button>
@@ -224,7 +229,31 @@ const OverviewFlow = () => {
           .reduce((_, k) => ({ ..._, [k]: o[k] }), {})
       })
 
-    console.log(yaml.stringify(tickets))
+    const yamlContent = yaml.stringify(tickets)
+    setPrint(yamlContent)
+  }
+
+  if (print) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', padding: '8px', background: '#eee' }}>
+          <Button variant="contained" onClick={() => setPrint(null)}>
+            print
+          </Button>
+          <Button color="error" variant="outlined" onClick={() => { setYaml(null); setPrint(null) }}>
+            reset
+          </Button>
+          <Button color="success" variant="outlined" onClick={() => setYaml(yamlText + '\n')}>
+            change color
+          </Button>
+        </div>
+        <div style={{ flex: 1, padding: '20px' }}>
+          <pre>
+            {print}
+          </pre>
+        </div>
+      </div>
+    )
   }
 
   return (

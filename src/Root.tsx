@@ -1,12 +1,15 @@
-import App from 'components/App'
 import { ThemeProvider } from '@mui/material/styles'
 
+import App from 'components/App'
+import Layout from 'components/Layout'
 import { theme } from './theme'
 
 const Root = () => {
   return (
     <ThemeProvider theme={theme}>
-      <App />
+      <Layout>
+        <App />
+      </Layout>
     </ThemeProvider>
   )
 }

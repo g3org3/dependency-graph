@@ -229,7 +229,13 @@ const OverviewFlow = () => {
           .reduce((_, k) => ({ ..._, [k]: o[k] }), {})
       })
 
-    const yamlContent = yaml.stringify(tickets)
+    let yamlContent = ""
+    for (const id in tickets) {
+      const ticket = tickets[id]
+      yamlContent += "- "
+      yamlContent += yaml.stringify(ticket).split('\n').join('\n  ')
+      yamlContent += "\n"
+    }
     setPrint(yamlContent)
   }
 

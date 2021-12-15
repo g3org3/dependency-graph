@@ -66,19 +66,12 @@ const OverviewFlow = () => {
   const ticketsById = tickets.reduce((_: {}, t: PreTicket): TicketsById => ({ ..._, [t.id]: { ...t, colorid: getRColor() } }), {})
 
   const generateNodes = (ticket: PreTicket, i: number) => {
-    // const colors = {
-    //   done: 'green',
-    //   doing: 'orange',
-    //   todo: 'blue',
-    //   return: 'red',
-    // }
-    // const color = colors[ticket.status] || 'black'
     const backgrounds: { [key: string]: string } = {
       default: '#f8f8f8',
       doing: 'orange',
       done: 'green',
       return: 'red',
-      todo: 'purple',
+      todo: 'cornflowerblue',
     }
     const background = backgrounds[ticket.status || 'default']
     const position = { x: 0, y: i * 70 }
@@ -251,13 +244,11 @@ const OverviewFlow = () => {
             //@ts-ignore
             nodeStrokeColor={(n) => {
               if (n.style?.background) return n.style.background
-
               return '#eee'
             }}
             //@ts-ignore
             nodeColor={(n) => {
               if (n.style?.background) return n.style.background
-
               return '#fff'
             }}
             nodeBorderRadius={2}

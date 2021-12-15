@@ -5,7 +5,7 @@ import yaml from 'js-yaml'
 import { toast } from 'react-hot-toast'
 
 import { generateNodes, generateLinks, getTicketsToById } from './App.service'
-import type { PreTicket, TicketsById, Ticket } from './App.service'
+import type { PreTicket, Ticket } from './App.service'
 import { dependencyInYaml } from './example.yml'
 import { useFile } from './App.hook'
 import { rfInstanceToYaml } from './rfinstance.service'

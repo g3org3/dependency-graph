@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button'
-import React, { createRef, useState } from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 import ReactFlow, { MiniMap, Controls, Background } from 'react-flow-renderer'
 import yaml from 'js-yaml'
 import { toast } from 'react-hot-toast'
@@ -16,7 +16,17 @@ const OverviewFlow = () => {
   const [rfINstance, setRFInstance] = useState(null)
   const [print, setPrint] = useState<string | null>(null)
   const [elements, setElements] = useState<Array<Ticket> | null>(null)
-  // const [] = useFile()
+  const [fileHandler, setFilehandler] = useState(null)
+  const [content] = useFile(fileHandler, setFilehandler, rfINstance)
+
+  useEffect(() => {
+    if (content) {
+      loadTickets(content)
+      toast.success('File loaded')
+    } else {
+      toast.error('Content of the file was empty')
+    }
+  }, [content])
 
   // @ts-ignore
   const onLoad = (reactFlowInstance) => {

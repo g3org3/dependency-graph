@@ -1,10 +1,12 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { rfInstanceToYaml } from './rfinstance.service'
 
 // @ts-ignore
-export const useFile = (fileHandler, rfInstance) => {
+export const useFile = (fileHandler, setFilehandler, rfInstance) => {
+  const [content, setContent] = useState(null)
+
   useEffect(() => {
     let keys: Array<string> = []
     document.onkeydown = async (event) => {
@@ -19,6 +21,7 @@ export const useFile = (fileHandler, rfInstance) => {
         keys = []
       }
       if (combo === 'Control-o' || combo === 'Meta-o') {
+        console.log('> open')
         const options = {
           types: [
             {
@@ -29,19 +32,18 @@ export const useFile = (fileHandler, rfInstance) => {
           multiple: false,
         }
         // @ts-ignore
-        const [fileHandler] = await window.showOpenFilePicker(options)
-        if (fileHandler.kind !== 'file') {
+        const [_fileHandler] = await window.showOpenFilePicker(options)
+        if (_fileHandler.kind !== 'file') {
           toast.error('Could not open file')
           return
         }
-        const file = await fileHandler.getFile()
-        const content = await file.text()
-        // @ts-ignore
-        const notes: Array<NoteType> = yaml.loadAll(content)
-        // dispatch(actions.setFileHandler({ fileHandler }))
-        // dispatch(actions.replaceNotes({ notes }))
+        const file = await _fileHandler.getFile()
+        const _content = await file.text()
+        setContent(_content)
+        setFilehandler(_fileHandler)
         toast.success('Loaded')
       } else if (combo === 'Control-s' || combo === 'Meta-s') {
+        console.log('> save')
         try {
           if (!rfInstance) {
             toast.error('There are no tickets export')
@@ -58,5 +60,7 @@ export const useFile = (fileHandler, rfInstance) => {
         }
       }
     }
-  }, [fileHandler, rfInstance])
+  }, [setContent, setFilehandler, fileHandler, rfInstance])
+
+  return [content]
 }

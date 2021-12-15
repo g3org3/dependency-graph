@@ -1,9 +1,9 @@
 {
-  "name": "Dependency Graph",
+  "name": "Dependency Graph | Jorge Adolfo",
   "short_name": "Dep-Graph",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "/favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
@@ -18,7 +18,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": ".",
+  "start_url": "./",
   "theme_color": "#00ffd3",
   "background_color": "#F5F7F8",
   "display": "standalone"

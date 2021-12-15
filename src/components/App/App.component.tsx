@@ -122,6 +122,13 @@ const OverviewFlow = () => {
                 {ticket.id}
               </b>
             </div>
+            {ticket.owner ? <small style={{
+              background: '#fff',
+              textAlign: 'center',
+              padding: '4px',
+              borderRadius: '14px'
+            }}>{ticket.owner}</small>
+              : null}
             <small
               style={{
                 textTransform: 'capitalize',

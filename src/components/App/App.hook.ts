@@ -45,7 +45,7 @@ export const useFile = (fileHandler, setFilehandler, rfInstance) => {
           const _newContent = JSON.parse(_content)
             .elements.filter((x: { type: string }) => x.type === 'text')
             .map((t: { text: string }) => t.text)
-            .filter((t: string) => t.trimStart().indexOf('- id:') === 0)
+            .filter((t: string) => t.indexOf('- id:') === 0)
             .join('\n')
           setContent(_newContent)
         } else {

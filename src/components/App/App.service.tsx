@@ -25,6 +25,8 @@ export const getTicketsToById = (tickets: Array<PreTicket>): TicketsById => {
 
 const getRoot = (byId: TicketsById, id: string): Ticket => {
   const ticket = byId[id]
+  if (!ticket) return null;
+
   if (!ticket.parent) {
     return ticket
   }
@@ -54,8 +56,9 @@ export const generateNodes = (ticketsById: TicketsById) => (ticket: PreTicket, i
   if (!ticket.colorid && ticket.parent && ticket.parent.indexOf(',') === -1) {
     // @ts-ignore
     const t = getRoot(ticketsById, ticket.parent)
-    console.log(ticket.id, t.id)
-    colorid = t.colorid
+    if (t) {
+      colorid = t.colorid
+    }
   }
   return {
     id: ticket.id,

@@ -26,7 +26,7 @@ export const useFile = (fileHandler, setFilehandler, rfInstance) => {
           types: [
             {
               description: 'Text',
-              accept: { 'text/*': ['.txt', '.yaml', '.yml'] },
+              accept: { 'text/*': ['.txt', '.yaml', '.yml', '.excalidraw'] },
             },
           ],
           multiple: false,
@@ -38,9 +38,21 @@ export const useFile = (fileHandler, setFilehandler, rfInstance) => {
           return
         }
         const file = await _fileHandler.getFile()
+        const extension = file.name.split('.').pop()
         const _content = await file.text()
-        setContent(_content)
+
+        if (extension === 'excalidraw') {
+          const _newContent = JSON.parse(_content)
+            .elements.filter((x: { type: string }) => x.type === 'text')
+            .map((t: { text: string }) => t.text)
+            .filter((t: string) => t.trimStart().indexOf('- id:') === 0)
+            .join('\n')
+          setContent(_newContent)
+        } else {
+          setContent(_content)
+        }
         setFilehandler(_fileHandler)
+
         toast.success('Loaded')
       } else if (combo === 'Control-s' || combo === 'Meta-s') {
         console.log('> save')
@@ -49,6 +61,35 @@ export const useFile = (fileHandler, setFilehandler, rfInstance) => {
             toast.error('There are no tickets export')
             throw Error('There are no tickets export')
           }
+
+          const file = await fileHandler.getFile()
+          const extension = file.name.split('.').pop()
+
+          if (extension === 'excalidraw') {
+            const names = file.name.split('.')
+            names.pop()
+            const newName = names.join('.') + '.yml'
+            const options = {
+              types: [
+                {
+                  description: newName,
+                  accept: { 'text/*': ['.txt', '.yaml', '.yml'] },
+                },
+              ],
+            }
+
+            // @ts-ignore
+            const newFileHandler = await window.showSaveFilePicker(options)
+            // @ts-ignore
+            const writableStream = await newFileHandler.createWritable()
+            await writableStream.write(rfInstanceToYaml(rfInstance))
+            writableStream.close()
+            toast.success('Saved!')
+            setFilehandler(newFileHandler)
+
+            return
+          }
+
           // @ts-ignore
           const writableStream = await fileHandler.createWritable()
           await writableStream.write(rfInstanceToYaml(rfInstance))

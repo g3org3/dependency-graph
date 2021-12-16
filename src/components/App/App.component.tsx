@@ -30,7 +30,6 @@ const OverviewFlow = () => {
 
   // @ts-ignore
   const onLoad = (reactFlowInstance) => {
-    console.log('flow loaded:', reactFlowInstance)
     reactFlowInstance.fitView()
     setRFInstance(reactFlowInstance)
   }

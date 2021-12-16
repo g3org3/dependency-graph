@@ -23,7 +23,7 @@ export const getTicketsToById = (tickets: Array<PreTicket>): TicketsById => {
   }, {})
 }
 
-const getRoot = (byId: TicketsById, id: string): Ticket => {
+const getRoot = (byId: TicketsById, id: string): Ticket | null => {
   const ticket = byId[id]
   if (!ticket) return null;
 

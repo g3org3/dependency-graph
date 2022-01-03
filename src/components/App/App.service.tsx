@@ -46,7 +46,7 @@ export const generateNodes = (ticketsById: TicketsById) => (ticket: PreTicket, i
     return: 'red',
     todo: 'cornflowerblue',
   }
-  const background = backgrounds[ticket.status || 'default']
+  // const background = backgrounds[ticket.status || 'default']
   const position = { x: 0, y: i * 70 }
   if (ticket.position) {
     position.x = Number(ticket.position.split(',')[0])
@@ -73,7 +73,7 @@ export const generateNodes = (ticketsById: TicketsById) => (ticket: PreTicket, i
           <div style={{ display: 'flex', alignItems: 'space-between' }}>
             <b
               style={{
-                background,
+                background: backgrounds.default,
                 border: '2px solid white',
                 color: '#000',
                 padding: '4px 8px',
@@ -103,6 +103,13 @@ export const generateNodes = (ticketsById: TicketsById) => (ticket: PreTicket, i
             padding: '4px',
             borderRadius: '14px'
           }}>{ticket.owner}</small>
+            : null}
+          {ticket.status ? <small style={{
+            background: '#fff',
+            textAlign: 'center',
+            padding: '4px',
+            borderRadius: '4px'
+          }}>{ticket.status}</small>
             : null}
           <small
             style={{

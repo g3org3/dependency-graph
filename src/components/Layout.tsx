@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
   Avatar,
   Box,
@@ -32,11 +32,12 @@ import {
 } from 'modules/App/App.selectors'
 import { actions } from 'modules/App'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { getFileName, openAndSaveToFile, saveToFile } from 'services/file'
+import { getFileName, openAndSaveToFile, readFileContent, saveToFile } from 'services/file'
 import { rfInstanceToYaml } from 'services/rfinstance'
 import { generateLinks, getPreTicketsToById } from 'services/tickets'
 import { generateNodes } from 'services/node'
 import { dbSet } from 'config/firebase'
+import { reload } from 'firebase/auth'
 
 interface Props {
   title: string
@@ -119,6 +120,24 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems }) =>
       })
   }
 
+  useHotkeys(
+    'r',
+    () => {
+      readFileContent(fileHandler)
+        .then((content) => {
+          loadTickets(content)
+        })
+        .catch((err) => {
+          toast({
+            title: 'Parse Error',
+            description: err.message,
+            status: 'error',
+          })
+        })
+    },
+    [dispatch, fileHandler]
+  )
+
   const loadTickets = (ymlText: string) => {
     // @ts-ignore
     const preTickets: Array<PreTicket> = yaml.loadAll(ymlText).flat()
@@ -142,6 +161,7 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems }) =>
     }
   }
 
+  useHotkeys('c', reloadApp, [elements, rfInstance, toast])
   useHotkeys('ctrl+s', saveFile, [rfInstance, fileHandler, toast])
   useHotkeys('command+s', saveFile, [rfInstance, fileHandler, toast])
 
@@ -193,27 +213,24 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems }) =>
                 </MenuItem>
               ))}
               {!isEmpty && (
-                <MenuItem onClick={reloadApp} display="flex" gap={2}>
-                  <span>🎨</span>
+                <MenuItem onClick={reloadApp} icon={<span>🎨</span>} command="C">
                   Change Colors
                 </MenuItem>
               )}
               {!isEmpty && currentUser && (
                 // @ts-ignore
-                <MenuItem onClick={saveFile} display="flex" gap={2}>
-                  <span>💾</span>
+                <MenuItem onClick={saveFile} icon={<span>💾</span>} command="⌘S">
                   Save
                 </MenuItem>
               )}
+              {!isEmpty && <MenuDivider color={dividerColor} />}
               {!isEmpty && (
-                <MenuItem onClick={handleReset} display="flex" gap={2}>
-                  <span>🚧</span>
+                <MenuItem onClick={handleReset} icon={<span>🚧</span>}>
                   Reset
                 </MenuItem>
               )}
               {menuItems && <MenuDivider color={dividerColor} />}
-              <MenuItem onClick={handleAuth} display="flex" gap={2}>
-                <span>🔓</span>
+              <MenuItem onClick={handleAuth} icon={<span>🔓</span>}>
                 {currentUser ? 'Log out' : 'Log in'}
               </MenuItem>
             </MenuList>

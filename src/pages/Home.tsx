@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import ReactFlow, { MiniMap, Controls, Background } from 'react-flow-renderer'
 import { navigate } from '@reach/router'
 import { actions } from 'modules/App'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface Props {
   path?: string
@@ -30,31 +31,35 @@ const Home: FC<Props> = (props) => {
   }
 
   return (
-    <Flex height="90vh" bg={background} mt={isRFpushed ? '200px' : '0'}>
-      <ReactFlow
-        // @ts-ignore
-        elements={elements}
-        onLoad={onLoad}
-        snapToGrid
-        snapGrid={[15, 15]}
-      >
-        <MiniMap
-          //@ts-ignore
-          nodeStrokeColor={(n) => {
-            if (n.style?.background) return n.style.background
-            return '#eee'
-          }}
-          //@ts-ignore
-          nodeColor={(n) => {
-            if (n.style?.background) return n.style.background
-            return '#fff'
-          }}
-          nodeBorderRadius={2}
-        />
-        <Controls />
-        <Background color="#eee" gap={16} />
-      </ReactFlow>
-    </Flex>
+    <AnimatePresence>
+      <motion.div animate={{ y: isRFpushed ? 200 : 0 }} transition={{ duration: 0.2 }}>
+        <Flex height="90vh" bg={background}>
+          <ReactFlow
+            // @ts-ignore
+            elements={elements}
+            onLoad={onLoad}
+            snapToGrid
+            snapGrid={[15, 15]}
+          >
+            <MiniMap
+              //@ts-ignore
+              nodeStrokeColor={(n) => {
+                if (n.style?.background) return n.style.background
+                return '#eee'
+              }}
+              //@ts-ignore
+              nodeColor={(n) => {
+                if (n.style?.background) return n.style.background
+                return '#fff'
+              }}
+              nodeBorderRadius={2}
+            />
+            <Controls />
+            <Background color="#eee" gap={16} />
+          </ReactFlow>
+        </Flex>
+      </motion.div>
+    </AnimatePresence>
   )
 }
 

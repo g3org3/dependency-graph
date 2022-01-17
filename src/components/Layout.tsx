@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import {
   Avatar,
   Box,
@@ -37,7 +37,7 @@ import { rfInstanceToYaml } from 'services/rfinstance'
 import { generateLinks, getPreTicketsToById } from 'services/tickets'
 import { generateNodes } from 'services/node'
 import { dbSet } from 'config/firebase'
-import { reload } from 'firebase/auth'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface Props {
   title: string
@@ -236,16 +236,20 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems }) =>
             </MenuList>
           </Menu>
           <Flex grow={{ base: '1', md: '0' }} justifyContent="center">
-            <Link as={ReachLink} to={homeUrl || '/'}>
-              <Heading as="h1" size="md" display="flex" alignItems="center">
-                {title}{' '}
-                {by ? (
-                  <>
-                    <FiX size={13} /> {currentUser?.displayName || by}
-                  </>
-                ) : null}
-              </Heading>
-            </Link>
+            <AnimatePresence>
+              <motion.div whileHover={{ scale: 1.2 }}>
+                <Link as={ReachLink} to={homeUrl || '/'}>
+                  <Heading as="h1" size="md" display="flex" alignItems="center">
+                    {title}{' '}
+                    {by ? (
+                      <>
+                        <FiX size={13} /> {currentUser?.displayName || by}
+                      </>
+                    ) : null}
+                  </Heading>
+                </Link>
+              </motion.div>
+            </AnimatePresence>
           </Flex>
           <Flex flexGrow={{ base: '0', md: '1' }} gap={3} justify="flex-end" alignItems="center">
             <ColorModeSwitcher />

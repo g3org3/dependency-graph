@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
-import { rfInstanceToYaml } from './rfinstance.service'
+import { rfInstanceToYaml } from 'services/rfinstance'
 
 // @ts-ignore
 export const useFile = (fileHandler, setFilehandler, rfInstance) => {

@@ -4,11 +4,12 @@ import ReactFlow, { MiniMap, Controls, Background } from 'react-flow-renderer'
 import yaml from 'js-yaml'
 import { toast } from 'react-hot-toast'
 
-import { generateNodes, generateLinks, getTicketsToById } from './App.service'
-import type { PreTicket, Ticket } from './App.service'
+import { generateNodes } from 'services/node'
+import { generateLinks, getPreTicketsToById } from 'services/tickets'
+import { Ticket, PreTicket } from 'modules/App'
 import { dependencyInYaml } from './example.yml'
 import { useFile } from './App.hook'
-import { rfInstanceToYaml } from './rfinstance.service'
+import { rfInstanceToYaml } from 'services/rfinstance'
 
 const textareaRef: React.RefObject<HTMLTextAreaElement> = createRef()
 
@@ -37,11 +38,11 @@ const OverviewFlow = () => {
   const loadTickets = (ymlText: string) => {
     // @ts-ignore
     const tickets: Array<PreTicket> = yaml.load(ymlText)
-    const ticketsById = getTicketsToById(tickets)
+    const ticketsById = getPreTicketsToById(tickets)
     // @ts-ignore
     const initialElements: Array<Ticket> = [
       ...tickets.map(generateNodes(ticketsById)).filter(Boolean),
-      ...tickets.map(generateLinks).filter(Boolean).flat(),
+      ...tickets.map(generateLinks).flat().filter(Boolean),
     ]
     setElements(initialElements)
   }
@@ -68,7 +69,11 @@ const OverviewFlow = () => {
   if (!elements) {
     return (
       <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', padding: '20px' }}>
-        <textarea ref={textareaRef} style={{ height: '50vh', width: '50%' }} defaultValue={dependencyInYaml} />
+        <textarea
+          ref={textareaRef}
+          style={{ height: '50vh', width: '50%' }}
+          defaultValue={dependencyInYaml}
+        />
         <Button size="large" variant="contained" onClick={loadYaml}>
           load
         </Button>
@@ -79,11 +84,26 @@ const OverviewFlow = () => {
   if (print) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', padding: '8px', background: '#eee' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '8px',
+            padding: '8px',
+            background: '#eee',
+          }}
+        >
           <Button variant="contained" onClick={() => setPrint(null)}>
             print
           </Button>
-          <Button color="error" variant="outlined" onClick={() => { setElements(null); setPrint(null) }}>
+          <Button
+            color="error"
+            variant="outlined"
+            onClick={() => {
+              setElements(null)
+              setPrint(null)
+            }}
+          >
             reset
           </Button>
           <Button color="success" variant="outlined" onClick={() => reloadApp()}>
@@ -91,9 +111,7 @@ const OverviewFlow = () => {
           </Button>
         </div>
         <div style={{ flex: 1, padding: '20px' }}>
-          <pre>
-            {print}
-          </pre>
+          <pre>{print}</pre>
         </div>
       </div>
     )
@@ -101,7 +119,9 @@ const OverviewFlow = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', padding: '8px', background: '#eee' }}>
+      <div
+        style={{ display: 'flex', justifyContent: 'center', gap: '8px', padding: '8px', background: '#eee' }}
+      >
         <Button variant="outlined" onClick={show}>
           print
         </Button>

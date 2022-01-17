@@ -1,7 +1,8 @@
-import { ChakraProvider, ColorModeScript, theme } from '@chakra-ui/react'
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
 
 import Routes from 'components/Routes'
 import { AuthProvider } from 'config/auth'
+import theme from 'config/theme'
 
 const Root = () => {
   return (

@@ -98,7 +98,7 @@ export const generateNodes = (ticketsById: Map<string, PreTicket>) => (ticket: P
               padding: '4px',
             }}
           >
-            {ticket.notes}
+            <pre>{ticket.notes}</pre>
           </small>
         </div>
       ),

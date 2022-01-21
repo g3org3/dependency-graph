@@ -43,8 +43,8 @@ export const generateLinks = (ticket: PreTicket, i: number) => {
         id: `${parent}-${ticket.id}`,
         source: parent,
         target: ticket.id,
-        // type: "smoothstep"
-        // animated: true
+        // type: 'buttonedge',
+        // animated: true,
       }))
   }
 
@@ -52,7 +52,7 @@ export const generateLinks = (ticket: PreTicket, i: number) => {
     id: `${ticket.parent}-${ticket.id}`,
     source: ticket.parent,
     target: ticket.id,
-    // type: "smoothstep"
-    // animated: true
+    // type: 'buttonedge',
+    // animated: true,
   }
 }

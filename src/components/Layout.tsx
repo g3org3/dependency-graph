@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import {
   Avatar,
   Box,
@@ -19,7 +19,7 @@ import base64 from 'base-64'
 import yaml from 'js-yaml'
 import { useSelector, useDispatch } from 'react-redux'
 import { FiX } from 'react-icons/fi'
-import { Link as ReachLink, useNavigate } from '@reach/router'
+import { Link as ReachLink, useNavigate, WindowLocation } from '@reach/router'
 
 import ColorModeSwitcher from 'components/ColorModeSwitcher'
 import { useAuth } from 'config/auth'
@@ -45,10 +45,11 @@ interface Props {
   by?: string
   childrend?: React.ReactNode
   path?: string
+  location?: WindowLocation
   menuItems?: Array<{ path: string; label: string; icon: string }>
 }
 
-const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems }) => {
+const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems, location }) => {
   const navigate = useNavigate()
   const { currentUser, logout } = useAuth()
   const dispatch = useDispatch()
@@ -59,8 +60,19 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems }) =>
   const rfInstance = useSelector(selectRFInstance)
   const navbarBackgroundColor = useColorModeValue('teal.300', 'teal.500')
   const dividerColor = useColorModeValue('gray.200', 'gray.700')
-  const pagePadding = { base: '10px', md: '20px 40px' }
+  const pagePadding =
+    location?.pathname === '/graph' ? { base: '10px', md: 0 } : { base: '10px', md: '20px 40px' }
   const isEmpty = useSelector(selectIsTicketsEmpty)
+  const [colorblind, setColorblind] = useState('off')
+
+  useEffect(() => {
+    if (rfInstance) {
+      const status = colorblind === 'off' ? 'Disabled' : 'Enabled'
+      toast({ title: 'Color Blind Mode ' + status, status: 'info' })
+      reloadApp()
+    }
+    // eslint-disable-next-line
+  }, [colorblind])
 
   // @ts-ignore
   const saveFile = (e: any) => {
@@ -125,7 +137,7 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems }) =>
     () => {
       readFileContent(fileHandler)
         .then((content) => {
-          loadTickets(content)
+          loadTickets(content, colorblind)
         })
         .catch((err) => {
           toast({
@@ -135,17 +147,17 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems }) =>
           })
         })
     },
-    [dispatch, fileHandler]
+    [dispatch, fileHandler, colorblind]
   )
 
-  const loadTickets = (ymlText: string) => {
+  const loadTickets = (ymlText: string, colorMode: string) => {
     // @ts-ignore
     const preTickets: Array<PreTicket> = yaml.loadAll(ymlText).flat()
     const ticketsById = getPreTicketsToById(preTickets)
 
     // @ts-ignore
     const tickets: Array<Ticket> = [
-      ...preTickets.map(generateNodes(ticketsById)).filter(Boolean),
+      ...preTickets.map(generateNodes(ticketsById, colorMode)).filter(Boolean),
       ...preTickets.map(generateLinks).flat().filter(Boolean),
     ]
 
@@ -156,12 +168,13 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems }) =>
   const reloadApp = () => {
     if (elements) {
       const newyml = rfInstanceToYaml(rfInstance, { removeColor: true })
-      loadTickets(newyml)
+      loadTickets(newyml, colorblind)
       toast({ title: 'refresh', status: 'success' })
     }
   }
 
-  useHotkeys('c', reloadApp, [elements, rfInstance, toast])
+  useHotkeys('c', reloadApp, [elements, rfInstance, toast, colorblind])
+  useHotkeys('b', () => setColorblind(colorblind === 'off' ? 'on' : 'off'), [colorblind])
   useHotkeys('ctrl+s', saveFile, [rfInstance, fileHandler, toast])
   useHotkeys('command+s', saveFile, [rfInstance, fileHandler, toast])
 
@@ -215,6 +228,15 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems }) =>
               {!isEmpty && (
                 <MenuItem onClick={reloadApp} icon={<span>🎨</span>} command="C">
                   Change Colors
+                </MenuItem>
+              )}
+              {!isEmpty && (
+                <MenuItem
+                  onClick={() => setColorblind(colorblind === 'off' ? 'on' : 'off')}
+                  icon={<span>👁</span>}
+                  command="b"
+                >
+                  Color Blind: "{colorblind}"
                 </MenuItem>
               )}
               {!isEmpty && currentUser && (

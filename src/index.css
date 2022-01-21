@@ -1,0 +1,26 @@
+.react-flow__node-default {
+  width: unset;
+  min-width: 150px;
+}
+
+.chakra-ui-light .react-flow--ticket {
+  background: white;
+  transition: 200ms;
+}
+
+.chakra-ui-dark .react-flow--ticket {
+  background: #1a202c;
+  color: white;
+  transition: 200ms;
+}
+
+.edgebutton {
+  background: #eee;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  height: 20px;
+  line-height: 1;
+  width: 20px;
+}

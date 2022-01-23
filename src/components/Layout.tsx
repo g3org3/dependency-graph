@@ -1,4 +1,3 @@
-import React, { useCallback, useState, useEffect } from 'react'
 import {
   Avatar,
   Box,
@@ -15,14 +14,19 @@ import {
   useColorModeValue,
   useToast,
 } from '@chakra-ui/react'
-import base64 from 'base-64'
-import yaml from 'js-yaml'
-import { useSelector, useDispatch } from 'react-redux'
-import { FiX } from 'react-icons/fi'
 import { Link as ReachLink, useNavigate, WindowLocation } from '@reach/router'
+import base64 from 'base-64'
+import { AnimatePresence, motion } from 'framer-motion'
+import yaml from 'js-yaml'
+import React, { useCallback, useState, useEffect } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { FiX } from 'react-icons/fi'
+import { useSelector, useDispatch } from 'react-redux'
 
 import ColorModeSwitcher from 'components/ColorModeSwitcher'
 import { useAuth } from 'config/auth'
+import { dbSet } from 'config/firebase'
+import { actions } from 'modules/App'
 import {
   selectFileHandler,
   selectFileName,
@@ -30,14 +34,10 @@ import {
   selectRFInstance,
   selectTickets,
 } from 'modules/App/App.selectors'
-import { actions } from 'modules/App'
-import { useHotkeys } from 'react-hotkeys-hook'
 import { getFileName, openAndSaveToFile, readFileContent, saveToFile } from 'services/file'
+import { generateNodes } from 'services/node'
 import { rfInstanceToYaml } from 'services/rfinstance'
 import { generateLinks, getPreTicketsToById } from 'services/tickets'
-import { generateNodes } from 'services/node'
-import { dbSet } from 'config/firebase'
-import { AnimatePresence, motion } from 'framer-motion'
 
 interface Props {
   title: string

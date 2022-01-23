@@ -1,14 +1,14 @@
 import { Flex, useColorModeValue } from '@chakra-ui/react'
-import { selectIsPushed, selectIsTicketsEmpty, selectTickets } from 'modules/App/App.selectors'
-import { FC, useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import ReactFlow, { MiniMap, Controls, Background, addEdge, removeElements } from 'react-flow-renderer'
 import { navigate } from '@reach/router'
-import { actions, Ticket } from 'modules/App'
 import { AnimatePresence, motion } from 'framer-motion'
+import { FC, useEffect, useState } from 'react'
+import ReactFlow, { MiniMap, Controls, Background, addEdge, removeElements } from 'react-flow-renderer'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { useSelector, useDispatch } from 'react-redux'
 
 import ButtonEdge from 'components/ButtonEdge'
+import { actions, Ticket } from 'modules/App'
+import { selectIsPushed, selectIsTicketsEmpty, selectTickets } from 'modules/App/App.selectors'
 interface Props {
   path?: string
 }
@@ -76,11 +76,13 @@ const Home: FC<Props> = (props) => {
                 //@ts-ignore
                 nodeStrokeColor={(n) => {
                   if (n.style?.background) return n.style.background
+
                   return '#eee'
                 }}
                 //@ts-ignore
                 nodeColor={(n) => {
                   if (n.style?.background) return n.style.background
+
                   return '#fff'
                 }}
                 nodeBorderRadius={2}

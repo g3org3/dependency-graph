@@ -1,4 +1,3 @@
-import React, { useState, useContext, createContext, useEffect } from 'react'
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -8,6 +7,8 @@ import {
   User,
   GoogleAuthProvider,
 } from 'firebase/auth'
+import React, { useState, useContext, createContext, useEffect } from 'react'
+
 import { auth } from 'config/firebase'
 
 interface AuthContextProps {
@@ -62,6 +63,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
       setCurrentUser(user)
       setLoading(false)
     })
+
     return unsubscribe
   }, [])
 

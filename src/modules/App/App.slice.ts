@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import React from 'react'
+
 import { getTicketsToById } from 'services/tickets'
 
 export interface PreTicket {

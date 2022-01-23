@@ -1,9 +1,9 @@
 import { Router } from '@reach/router'
 
 import Layout from 'components/Layout'
-import Welcome from 'pages/Welcome'
-import Login from 'pages/Login'
 import Home from 'pages/Home'
+import Login from 'pages/Login'
+import Welcome from 'pages/Welcome'
 
 // const menuItems = []
 

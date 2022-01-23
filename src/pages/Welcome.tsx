@@ -16,22 +16,22 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
-import { FC, useEffect, useState, useCallback } from 'react'
-import SyntaxHighlighter from 'react-syntax-highlighter'
-import { atomOneDark, atomOneLight } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import { navigate } from '@reach/router'
 import yaml from 'js-yaml'
+import { FC, useEffect, useState, useCallback } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
 import { FaMagic } from 'react-icons/fa'
 import { useDispatch } from 'react-redux'
+import SyntaxHighlighter from 'react-syntax-highlighter'
+import { atomOneDark, atomOneLight } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 
-import { dependencyInYaml } from 'services/examples'
-import { generateLinks, getPreTicketsToById } from 'services/tickets'
-import { generateNodes } from 'services/node'
-import { actions, PreTicket, Ticket } from 'modules/App'
-import { navigate } from '@reach/router'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { getFileName, openAndChooseFile } from 'services/file'
 import { useAuth } from 'config/auth'
 import { dbOnValue } from 'config/firebase'
+import { actions, PreTicket, Ticket } from 'modules/App'
+import { dependencyInYaml } from 'services/examples'
+import { getFileName, openAndChooseFile } from 'services/file'
+import { generateNodes } from 'services/node'
+import { generateLinks, getPreTicketsToById } from 'services/tickets'
 
 interface Props {
   default?: boolean

@@ -39,6 +39,7 @@ export const rfInstanceToYaml = (rfINstance, options?: {}): stsring => {
         //@ts-ignore
         colorid: _options.removeColor ? undefined : t.colorid,
       }
+
       return (
         Object.keys(o)
           //@ts-ignore

@@ -1,5 +1,4 @@
 import { PreTicket } from 'modules/App'
-
 import { getRoot } from 'services/tickets'
 
 export const generateNodes =
@@ -30,6 +29,7 @@ export const generateNodes =
         colorid = t.colorid
       }
     }
+
     return {
       id: ticket.id,
       status: ticket.status,

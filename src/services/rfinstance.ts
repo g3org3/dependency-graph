@@ -29,6 +29,8 @@ export const rfInstanceToYaml = (rfINstance, options?: {}): stsring => {
         //@ts-ignore
         notes: t.notes,
         //@ts-ignore
+        label: t.label,
+        //@ts-ignore
         position: t.position ? `${Math.floor(t.position.x)},${Math.floor(t.position.y)}` : null,
         //@ts-ignore
         parent: t.parent,

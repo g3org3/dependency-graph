@@ -1,6 +1,5 @@
 import { Flex, useColorModeValue } from '@chakra-ui/react'
 import { navigate } from '@reach/router'
-import { AnimatePresence, motion } from 'framer-motion'
 import { FC, useEffect, useState } from 'react'
 import ReactFlow, { MiniMap, Controls, Background, addEdge, removeElements } from 'react-flow-renderer'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -8,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import ButtonEdge from 'components/ButtonEdge'
 import { actions, Ticket } from 'modules/App'
-import { selectIsPushed, selectIsTicketsEmpty, selectTickets } from 'modules/App/App.selectors'
+import { selectIsTicketsEmpty, selectTickets } from 'modules/App/App.selectors'
 interface Props {
   path?: string
 }
@@ -21,10 +20,9 @@ const Home: FC<Props> = (props) => {
   const dispatch = useDispatch()
   const elements = useSelector(selectTickets)
   const isEmpty = useSelector(selectIsTicketsEmpty)
-  const isRFpushed = useSelector(selectIsPushed)
   const background = useColorModeValue('white', 'gray.800')
   const bgPointsColor = useColorModeValue('#000', '#999')
-  const [showMinmap, setShowMinimap] = useState(true)
+  const [showMinmap, setShowMinimap] = useState(false)
 
   useHotkeys('m', () => setShowMinimap(!showMinmap), [showMinmap])
 

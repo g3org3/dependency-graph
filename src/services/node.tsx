@@ -34,6 +34,7 @@ export const generateNodes =
       id: ticket.id,
       status: ticket.status,
       notes: ticket.notes,
+      label: ticket.label,
       owner: ticket.owner,
       points: ticket.points,
       colorid,
@@ -87,6 +88,18 @@ export const generateNodes =
               <small
                 style={{
                   background,
+                  textAlign: 'center',
+                  padding: '4px',
+                  borderRadius: '4px',
+                }}
+              >
+                {ticket.status}
+              </small>
+            ) : null}
+            {ticket.status ? (
+              <small
+                className="react-flow--ticket"
+                style={{
                   textAlign: 'center',
                   padding: '4px',
                   borderRadius: '4px',

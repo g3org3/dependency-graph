@@ -9,6 +9,7 @@ export interface PreTicket {
   notes?: string
   owner?: string
   parent?: string
+  label?: string
   tag?: string
   points?: number
   position?: string

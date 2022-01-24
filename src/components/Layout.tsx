@@ -203,6 +203,7 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems, loca
         <Box
           bg={navbarBackgroundColor}
           position="fixed"
+          zIndex="5"
           top="0"
           display="flex"
           width="100vw"
@@ -251,7 +252,7 @@ const Layout: React.FC<Props> = ({ homeUrl, children, title, by, menuItems, loca
                   Reset
                 </MenuItem>
               )}
-              {menuItems && <MenuDivider color={dividerColor} />}
+              {!!menuItems?.length && <MenuDivider color={dividerColor} />}
               <MenuItem onClick={handleAuth} icon={<span>🔓</span>}>
                 {currentUser ? 'Log out' : 'Log in'}
               </MenuItem>

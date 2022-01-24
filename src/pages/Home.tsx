@@ -54,46 +54,42 @@ const Home: FC<Props> = (props) => {
   }
 
   return (
-    <AnimatePresence>
-      <motion.div animate={{ y: isRFpushed ? 200 : 0 }} transition={{ duration: 0.2 }}>
-        <Flex height="calc(100vh - 88px)" bg={background}>
-          <ReactFlow
-            // @ts-ignore
-            elements={elements}
-            onLoad={onLoad}
-            snapToGrid
-            snapGrid={[15, 15]}
-            edgeTypes={edgeTypes}
-            // @ts-ignore
-            onElementsRemove={onElementsRemove}
-            // @ts-ignore
-            onConnect={onConnect}
-            deleteKeyCode={8} /* 'delete'-key */
-            key="edge-with-button"
-          >
-            {showMinmap ? (
-              <MiniMap
-                //@ts-ignore
-                nodeStrokeColor={(n) => {
-                  if (n.style?.background) return n.style.background
+    <Flex height="calc(100vh - 88px)" bg={background}>
+      <ReactFlow
+        // @ts-ignore
+        elements={elements}
+        onLoad={onLoad}
+        snapToGrid
+        snapGrid={[15, 15]}
+        edgeTypes={edgeTypes}
+        // @ts-ignore
+        onElementsRemove={onElementsRemove}
+        // @ts-ignore
+        onConnect={onConnect}
+        deleteKeyCode={8} /* 'delete'-key */
+        key="edge-with-button"
+      >
+        {showMinmap ? (
+          <MiniMap
+            //@ts-ignore
+            nodeStrokeColor={(n) => {
+              if (n.style?.background) return n.style.background
 
-                  return '#eee'
-                }}
-                //@ts-ignore
-                nodeColor={(n) => {
-                  if (n.style?.background) return n.style.background
+              return '#eee'
+            }}
+            //@ts-ignore
+            nodeColor={(n) => {
+              if (n.style?.background) return n.style.background
 
-                  return '#fff'
-                }}
-                nodeBorderRadius={2}
-              />
-            ) : null}
-            <Controls />
-            <Background color={bgPointsColor} gap={16} />
-          </ReactFlow>
-        </Flex>
-      </motion.div>
-    </AnimatePresence>
+              return '#fff'
+            }}
+            nodeBorderRadius={2}
+          />
+        ) : null}
+        <Controls />
+        <Background color={bgPointsColor} gap={16} />
+      </ReactFlow>
+    </Flex>
   )
 }
 

@@ -1,13 +1,19 @@
-import { Flex, useColorModeValue } from '@chakra-ui/react'
+import { Flex, Heading, Icon, useColorModeValue } from '@chakra-ui/react'
 import { navigate } from '@reach/router'
 import { FC, useEffect, useState } from 'react'
 import ReactFlow, { MiniMap, Controls, Background, addEdge, removeElements } from 'react-flow-renderer'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { FiZap, FiZapOff } from 'react-icons/fi'
 import { useSelector, useDispatch } from 'react-redux'
 
 import ButtonEdge from 'components/ButtonEdge'
 import { actions, Ticket } from 'modules/App'
-import { selectIsTicketsEmpty, selectTickets } from 'modules/App/App.selectors'
+import {
+  selectFileHandler,
+  selectFileName,
+  selectIsTicketsEmpty,
+  selectTickets,
+} from 'modules/App/App.selectors'
 interface Props {
   path?: string
 }
@@ -19,6 +25,8 @@ const edgeTypes = {
 const Home: FC<Props> = (props) => {
   const dispatch = useDispatch()
   const elements = useSelector(selectTickets)
+  const fileName = useSelector(selectFileName)
+  const fileHandler = useSelector(selectFileHandler)
   const isEmpty = useSelector(selectIsTicketsEmpty)
   const background = useColorModeValue('white', 'gray.800')
   const bgPointsColor = useColorModeValue('#000', '#999')
@@ -52,7 +60,11 @@ const Home: FC<Props> = (props) => {
   }
 
   return (
-    <Flex height="calc(100vh - 88px)" bg={background}>
+    <Flex height="calc(100vh - 83px)" bg={background} direction="column">
+      <Heading pl={4} gap={3} display="flex" alignItems="center">
+        {fileName || 'Untitled.txt'}
+        <Icon as={fileHandler ? FiZap : FiZapOff} fontSize={20} />
+      </Heading>
       <ReactFlow
         // @ts-ignore
         elements={elements}

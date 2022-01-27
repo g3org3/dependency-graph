@@ -17,7 +17,7 @@ export const generateNodes =
       .filter((key) => ticket.status?.indexOf(key) !== -1)
       .concat(['0.'])[0]
     const background = backgrounds[backgroundKey]
-    const position = { x: (i % 10) * 50, y: Math.floor(i / 10) * 50 }
+    const position = { x: (i % 10) * 185, y: Math.floor(i / 10) * 200 }
     if (ticket.position) {
       position.x = Number(ticket.position.split(',')[0])
       position.y = Number(ticket.position.split(',')[1])

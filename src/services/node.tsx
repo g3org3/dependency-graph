@@ -45,7 +45,7 @@ export const generateNodes =
               display: 'flex',
               flexDirection: 'column',
               gap: '8px',
-              width: ticket.notes?.indexOf('\n') !== -1 ? 'unset' : '150px',
+              width: ticket.notes?.indexOf('\n') !== -1 ? undefined : '150px',
             }}
           >
             <div className="react-flow--ticket" style={{ display: 'flex', alignItems: 'space-between' }}>

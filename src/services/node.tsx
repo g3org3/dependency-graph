@@ -96,7 +96,7 @@ export const generateNodes =
                 {ticket.status}
               </small>
             ) : null}
-            {ticket.status ? (
+            {ticket.label ? (
               <small
                 className="react-flow--ticket"
                 style={{
@@ -105,7 +105,7 @@ export const generateNodes =
                   borderRadius: '4px',
                 }}
               >
-                {ticket.status}
+                {ticket.label}
               </small>
             ) : null}
             <small

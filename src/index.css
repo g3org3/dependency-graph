@@ -1,5 +1,5 @@
 .react-flow__node-default {
-  width: unset;
+  width: unset !important;
 }
 
 .chakra-ui-light .react-flow--ticket {

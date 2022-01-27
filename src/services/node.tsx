@@ -33,7 +33,7 @@ export const generateNodes =
     if (x > 10) {
       x = x - 10
     }
-    const position = { x: x * 70, y: (i % 10) * 70 }
+    const position = { x: x * 70, y: Math.floor(i / 10) * 70 }
     if (ticket.position) {
       position.x = Number(ticket.position.split(',')[0])
       position.y = Number(ticket.position.split(',')[1])
